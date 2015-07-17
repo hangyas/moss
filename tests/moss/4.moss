@@ -1,0 +1,7 @@
+func main()
+   return asd(6, 3)
+end
+
+func asd(a, b)
+  return a + b + 8
+end

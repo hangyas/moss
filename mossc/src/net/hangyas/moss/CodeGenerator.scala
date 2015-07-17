@@ -21,6 +21,7 @@ class CodeGenerator {
   }
 
   def assignLabelToNextByte(label: Label): Unit = labels += ((label.id, (codeBuffer.size - 1).toByte));
+  def assignLabelToByte(label: Label): Unit = labels += ((label.id, codeBuffer.size.toByte));
 
   private val codeBuffer = mutable.Buffer[Byte]();
 
@@ -38,9 +39,10 @@ class CodeGenerator {
   // key: name, value: address
   private val locals = mutable.Map[String, Byte]();
   def getLocal(name: String): Byte = locals.getOrElseUpdate(name, {
-    val local: Byte = codeBuffer(currentFuncAddr);
-    codeBuffer.update(currentFuncAddr, (local + 1).toByte);
-    local;
+    val id = locals.size.toByte;
+    val localCount = codeBuffer(currentFuncAddr) + 1;
+    codeBuffer.update(currentFuncAddr, localCount.toByte);
+    id;
   });
 
   private var currentFuncAddr: Byte = -1;
@@ -54,10 +56,12 @@ class CodeGenerator {
     currentFuncAddr = codeBuffer.size.toByte;
 
     //save real address for labels
-    assignLabelToNextByte(getFunc(name));
+    assignLabelToByte(getFunc(name));
 
     //clear previous locals
     locals.clear()
+    //add args to locals
+    locals ++= args.zipWithIndex.map{ case a: (String, Int) => (a._1, a._2.toByte) };
 
     //append header
     codeBuffer += 0.toByte;

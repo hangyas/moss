@@ -1,0 +1,7 @@
+func main()
+   a = 6
+   if (a)
+     return a + 2
+   end
+   return (6 * (6 + 4) - 5)
+end

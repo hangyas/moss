@@ -10,11 +10,13 @@ abstract class Ast {
 
 class AstProgram(body: List[AstFunc]) extends Ast {
   override def code(generator: CodeGenerator): Unit = {
-    body.foreach(_.code(generator));
+    val main: AstFunc = body.find(_.name == "main").orNull
+    main.code(generator);
+    body.filter(_ != main).foreach(_.code(generator));
   }
 }
 
-class AstFunc(name: String, args: List[String], body: List[AstUnit]) extends Ast {
+class AstFunc(val name: String, val args: List[String], body: List[AstUnit]) extends Ast {
   override def code(generator: CodeGenerator): Unit ={
     generator.appendFunc(name, args);
     body.foreach(_.code(generator));
@@ -86,6 +88,7 @@ class AstOp(val name: Char) extends AstExpr {
 
 class AstCall(name: String) extends AstExpr {
   override def code(generator: CodeGenerator): Unit = {
-    //TODO
+    generator.append(generator.CALL);
+    generator.appendLabel(generator.getFunc(name));
   }
 }

@@ -30,10 +30,12 @@
  * representation of the machines state for stacking, use virtual addresses
  * */
 struct State{
-  unsigned char prev;	//previoud state's address
-  unsigned char mp;	//Memory Pointer: first address of the frame's memory
-  			//also the sp of the previous frame
-  unsigned char ip;	//Instruction Pointer
+  unsigned char prev;		//previoud state's address
+  unsigned char mp;		//Memory Pointer: first address of the frame's memory
+  				//also the sp of the previous frame (after the return)
+  unsigned char ip;		//Instruction Pointer
+  unsigned char args_size;
+  unsigned char locals_size;
 };
 
 int stack_size;

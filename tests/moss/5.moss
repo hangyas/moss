@@ -1,0 +1,12 @@
+func main()
+  v = bsd(3)
+  return asd(6, 3) + v
+end
+
+func asd(a, b)
+  return a + b + 8
+end
+
+func bsd(v)
+  return v - 2
+end

@@ -10,43 +10,47 @@ void cp(char *in, char *out, int size){
     out[i] = in[i];
 }
 
-void _printm(int s){
+void _printm(){
   for (int i = 0; stack + i <= sp; ++i)
-    printf("%d", (int)stack[i]);
+    printf("%d ", (int)stack[i]);
   printf("\n");
   fflush(stdout);
 }
 
 void init(){
-  stack = malloc(0x100);
+  stack = calloc(0x100, 1);
 
   //setup initial frame
 
   ip = program;
   sp = stack + sizeof(struct State) - 1;
-  mp = stack;
+  mp = stack; //only in the initial frame
 
   state = (struct State *)stack;
   state->mp = 0;
 }
 
 void call(unsigned char * fn){
-  char local_size = *fn;
-  char arg_size = *(++fn);
 
   //save current state
   state->ip = (unsigned char)(ip - program);
+  struct State *old = state;
 
   //setup new frame
-  struct State *next = (struct State *)(sp + local_size + 1);
+  struct State *next = (struct State *)(sp + old->locals_size + old->args_size + 1);
   next->prev = (unsigned char)((char *)state - stack);
+  next->locals_size = *fn;
+  next->args_size = *(++fn);
 
   //switch the the new frame
   state = next;
-  mp = sp + 1;
+  mp = sp - next->args_size + 1;
   state->mp = (unsigned char)(mp - stack);
-  sp = ((char *)state) + sizeof(struct State) - 1;
+  sp = ((char *)state) + next->locals_size + next->args_size + sizeof(struct State) - 1;
   ip = fn;
+
+//  printf("call %i \n", fn - program - 1);
+//  _printm();
 }
 
 void ret(){
@@ -82,7 +86,7 @@ void run(){
 
       case POP:
       	mp[*(++ip)] = *sp;
-        --sp; // TODO WARNING ERROR !!! ++ volt de gondoltam az hülyeség
+        --sp;
       break;
 
       case CALL:
@@ -128,7 +132,7 @@ void run(){
 
       case ADD:
 	      a = sp;
-        sp--;
+        --sp;
         *sp = *sp + *a;
       break;
 
@@ -154,6 +158,10 @@ void run(){
         printf("%d\n", (int)(*sp));
         fflush(stdout);
       break;
+
+      default:
+        printf("unexpected byte [%i]", ip - program);
+        return;
     }
   }
 }

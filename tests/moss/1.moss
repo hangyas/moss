@@ -1,7 +1,7 @@
+func main()
+   return asd()
+end
+
 func asd()
-   a = 6
-   if (a)
-     return a + 2
-   end
-   return (6 * (6 + 4) - 5)
+  return 8
 end

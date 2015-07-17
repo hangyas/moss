@@ -13,5 +13,6 @@ for i in tests/moss/*.moss; do
     echo -e "test $name: \t\t[OK]"
   else
     echo -e "test $name: \t\t[FAILED]"
+    echo "$out"
   fi
 done

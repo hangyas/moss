@@ -15,7 +15,7 @@ object Main {
       return;
     }
 
-    val code = new String(Files.readAllBytes(file.toPath));[]
+    val code = new String(Files.readAllBytes(file.toPath));
     val tokens = LexicalParser.parse(code);
     val ast = AstBuilder.parse(tokens);
     val generator = new CodeGenerator;
