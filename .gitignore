@@ -1,3 +1,6 @@
 mossvm/bin
 mossc/out
 tests/moss/*.mb
+dist
+dist/*
+mossc/.idea/workspace.xml
