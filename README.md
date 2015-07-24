@@ -4,7 +4,7 @@ A toy language with a small 8-bit toy vm.
 
 moss language
 -------------------
-Currenty the language is very limited, it's only handles byte as variable type. There are no void functions, no stdin/stdout, ot any other io, no heap.
+Currently the language is very limited, it's only handles byte as variable type. There are no void functions, no stdin/stdout, or any other io, no heap.
 ```
 func main()
   v = asd(3)
